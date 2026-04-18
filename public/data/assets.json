@@ -1,0 +1,130 @@
+[
+  {
+    "id": "A001",
+    "code": "AST-LAP-001",
+    "name": "Dell XPS 13",
+    "category": "Electronics",
+    "serial": "DX13-91A2-44Q1",
+    "purchaseDate": "2024-01-15",
+    "purchasePrice": 1450,
+    "usefulYears": 4,
+    "validity": "2028-01-15",
+    "status": "in-use",
+    "assignedTo": "Emma Johnson",
+    "assignedLocation": "HQ - Floor 3",
+    "maintenance": [
+      {
+        "id": "M001",
+        "date": "2025-03-10",
+        "type": "battery-check",
+        "cost": 45,
+        "note": "Battery health inspection completed."
+      }
+    ],
+    "assignmentHistory": [
+      {
+        "id": "H001",
+        "employee": "Emma Johnson",
+        "location": "HQ - Floor 3",
+        "from": "2024-01-20",
+        "to": null
+      }
+    ]
+  },
+  {
+    "id": "A002",
+    "code": "AST-MON-002",
+    "name": "LG UltraWide 34\"",
+    "category": "Electronics",
+    "serial": "LG34-UW-2P09",
+    "purchaseDate": "2023-08-04",
+    "purchasePrice": 720,
+    "usefulYears": 5,
+    "validity": "2028-08-04",
+    "status": "in-use",
+    "assignedTo": "Liam Carter",
+    "assignedLocation": "Branch Office",
+    "maintenance": [],
+    "assignmentHistory": [
+      {
+        "id": "H002",
+        "employee": "Liam Carter",
+        "location": "Branch Office",
+        "from": "2023-08-10",
+        "to": null
+      }
+    ]
+  },
+  {
+    "id": "A003",
+    "code": "AST-FUR-003",
+    "name": "Ergonomic Office Chair",
+    "category": "Furniture",
+    "serial": "FURN-ERGO-117",
+    "purchaseDate": "2022-11-22",
+    "purchasePrice": 380,
+    "usefulYears": 6,
+    "validity": "2028-11-22",
+    "status": "in-maintenance",
+    "assignedTo": "Unassigned",
+    "assignedLocation": "Storage Room A",
+    "maintenance": [
+      {
+        "id": "M003",
+        "date": "2026-01-09",
+        "type": "wheel-replacement",
+        "cost": 32,
+        "note": "Caster wheel set replaced."
+      }
+    ],
+    "assignmentHistory": []
+  },
+  {
+    "id": "A004",
+    "code": "AST-NET-004",
+    "name": "Cisco Access Point",
+    "category": "Networking",
+    "serial": "CSCO-AP-77X2",
+    "purchaseDate": "2021-05-18",
+    "purchasePrice": 540,
+    "usefulYears": 5,
+    "validity": "2026-05-18",
+    "status": "retired",
+    "assignedTo": "Facilities Team",
+    "assignedLocation": "HQ - Server Room",
+    "maintenance": [],
+    "assignmentHistory": [
+      {
+        "id": "H004",
+        "employee": "Facilities Team",
+        "location": "HQ - Server Room",
+        "from": "2021-06-01",
+        "to": "2026-02-15"
+      }
+    ]
+  },
+  {
+    "id": "A005",
+    "code": "AST-MOB-005",
+    "name": "iPhone 14",
+    "category": "Mobile",
+    "serial": "IP14-AL-9021",
+    "purchaseDate": "2024-06-30",
+    "purchasePrice": 1099,
+    "usefulYears": 4,
+    "validity": "2028-06-30",
+    "status": "in-use",
+    "assignedTo": "Noah Lee",
+    "assignedLocation": "Remote",
+    "maintenance": [],
+    "assignmentHistory": [
+      {
+        "id": "H005",
+        "employee": "Noah Lee",
+        "location": "Remote",
+        "from": "2024-07-01",
+        "to": null
+      }
+    ]
+  }
+]
