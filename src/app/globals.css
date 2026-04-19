@@ -28,9 +28,16 @@ body {
 /* Theme baseline uses the required dark brown + dark green gradient combination. */
 body {
   background: linear-gradient(150deg, var(--color-brown) 0%, var(--color-green) 100%);
-    color: var(--color-text);
+  color: var(--color-text);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.45;
+}
+/* Display mode variant increases contrast for readability-sensitive users. */
+body[data-display-mode="high-contrast"] {
+  --color-text: #fff8ee;
+  --color-muted: #f0d8b8;
+  --color-panel: #141513;
+  --color-panel-border: #6b5948;
 }
 /* Root layout container organizes shared app chrome and page content. */
 .app-body {
@@ -145,7 +152,7 @@ body {
 .muted-text {
   margin: 0;
   color: var(--color-muted);
-  }
+}
   
   /* Accent button style prioritizes the two mandatory colors for small controls. */
   .accent-button {
@@ -162,13 +169,21 @@ body {
   cursor: pointer;
 }
 
-        /* Enforce a single radius token for native button controls across the app. */
-        button,
-        input[type="button"],
-        input[type="submit"],
-        input[type="reset"] {
-          border-radius: var(--button-radius);
-        }
+.accent-button:hover {
+  filter: brightness(1.08);
+}
+
+/* Secondary variant keeps visual hierarchy when two action buttons are shown. */
+.ghost-button {
+  background: color-mix(in srgb, var(--color-panel) 70%, var(--color-green));
+}
+/* Enforce a single radius token for native button controls across the app. */
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  border-radius: var(--button-radius);
+}
 
 .accent-button:disabled {
   opacity: 0.6;
@@ -265,7 +280,17 @@ body {
     flex-direction: column;
     gap: 8px;
   }
+
+    /* Row action layout supports side-by-side buttons with responsive wrapping. */
+    .row-actions {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+    }
   
+    .full-width-field {
+      grid-column: 1 / -1;
+    }
   .error-text {
     margin: 0;
     color: var(--color-error);
@@ -297,6 +322,37 @@ body {
   .mobile-only-grid {
     display: none;
   }
+/* Density modes tune spacing without changing data or component structure. */
+body.density-compact .panel {
+  padding: 12px;
+}
+
+body.density-compact .asset-table th,
+body.density-compact .asset-table td {
+  padding: 7px;
+}
+
+body.density-spacious .panel {
+  padding: 20px;
+}
+
+body.density-spacious .asset-table th,
+body.density-spacious .asset-table td {
+  padding: 13px;
+}
+
+/* Font-size modes provide a global readability preference layer. */
+body.font-small {
+  font-size: 14px;
+}
+
+body.font-medium {
+  font-size: 16px;
+}
+
+body.font-large {
+  font-size: 18px;
+}
   
   /* Responsive adjustments preserve readability and touch ergonomics on mobile. */
   @media (max-width: 820px) {

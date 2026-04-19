@@ -110,7 +110,7 @@ Implementation phases are defined in [WorkFlow.md](WorkFlow.md):
 
 ## Current Status
 
-- Phase 0, Phase 1, and Phase 2 are completed.
-- Next target phase: Phase 3.
+- Phase 0, Phase 1, Phase 2, and Phase 3 are completed.
+- Next target phase: Phase 4.
 - Active theme baseline: gradient #5C4033 + #182c25 with priority on
   small UI elements.

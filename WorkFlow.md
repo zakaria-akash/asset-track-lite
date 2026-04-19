@@ -22,7 +22,8 @@ Phase 0 to Phase 5.
 - Phase 0: Completed
 - Phase 1: Completed
 - Phase 2: Completed
-- Phase 3 to Phase 5: Pending
+- Phase 3: Completed
+- Phase 4 to Phase 5: Pending
 
 ## Phase 0 - Foundation and Project Setup
 

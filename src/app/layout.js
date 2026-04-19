@@ -1,5 +1,6 @@
 import "./globals.css";
 import Link from "next/link";
+import SettingsProvider from "./components/SettingsProvider";
 
 // Global metadata baseline for the MVP shell.
 export const metadata = {
@@ -22,24 +23,27 @@ export default function RootLayout({ children }) {
     // Root document wrapper hosts shared chrome used by all app routes.
     <html lang="en">
       <body className="app-body">
-        {/* Top bar is the single navigation source for Phase 2 core pages. */}
-        <header className="app-topbar">
-          <Link className="app-brand" href="/">
-            Asset Track Lite
-          </Link>
+        {/* Provider applies persisted visual settings globally on the client. */}
+        <SettingsProvider>
+          {/* Top bar is the single navigation source for core app pages. */}
+          <header className="app-topbar">
+            <Link className="app-brand" href="/">
+              Asset Track Lite
+            </Link>
 
-          {/* Route links remain compact and reuse the mandatory color accents. */}
-          <nav aria-label="Primary" className="app-nav">
-            {navLinks.map((link) => (
-              <Link key={link.href} href={link.href}>
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        </header>
+            {/* Route links remain compact and reuse the mandatory color accents. */}
+            <nav aria-label="Primary" className="app-nav">
+              {navLinks.map((link) => (
+                <Link key={link.href} href={link.href}>
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+          </header>
 
-        {/* Main container gives every page consistent spacing and readable width. */}
-        <main className="app-content">{children}</main>
+          {/* Main container gives every page consistent spacing and readable width. */}
+          <main className="app-content">{children}</main>
+        </SettingsProvider>
       </body>
     </html>
   );
