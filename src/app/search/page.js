@@ -27,8 +27,9 @@ export default function SearchPage() {
 
   // Request-state values support clear loading and error feedback.
   const [isSearching, setIsSearching] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorState, setErrorState] = useState({ message: "", details: [] });
   const [results, setResults] = useState([]);
+  const [hasSearched, setHasSearched] = useState(false);
 
   // Small derived value communicates how much data was returned without extra markup.
   const resultSummary = useMemo(
@@ -52,14 +53,16 @@ export default function SearchPage() {
   function clearFilters() {
     setFilters(INITIAL_FILTERS);
     setResults([]);
-    setErrorMessage("");
+    setErrorState({ message: "", details: [] });
+    setHasSearched(false);
   }
 
   // Executes API search using current filter state and handles success/error responses.
   async function handleSearch(event) {
     event.preventDefault();
     setIsSearching(true);
-    setErrorMessage("");
+    setErrorState({ message: "", details: [] });
+    setHasSearched(true);
 
     try {
       const response = await fetch("/api/search", {
@@ -70,14 +73,28 @@ export default function SearchPage() {
 
       const result = await response.json();
       if (!response.ok || result.ok !== true) {
-        throw new Error(result.error || "Search request failed.");
+        const message = result.error || "Search request failed.";
+        const details = Array.isArray(result.details) ? result.details : [];
+        throw new Error(JSON.stringify({ message, details }));
       }
 
       setResults(result.data || []);
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error ? error.message : "Search request failed."
-      );
+      // Structured parsing ensures server validation details are visible to users.
+      let message = "Search request failed.";
+      let details = [];
+
+      if (error instanceof Error) {
+        try {
+          const parsed = JSON.parse(error.message);
+          message = parsed.message || message;
+          details = Array.isArray(parsed.details) ? parsed.details : [];
+        } catch {
+          message = error.message;
+        }
+      }
+
+      setErrorState({ message, details });
       setResults([]);
     } finally {
       setIsSearching(false);
@@ -174,7 +191,21 @@ export default function SearchPage() {
       </div>
 
       {/* Error feedback is shown in-place to keep context near the search controls. */}
-      {errorMessage ? <p className="panel error-text">{errorMessage}</p> : null}
+      {errorState.message ? <p className="panel error-text">{errorState.message}</p> : null}
+      {errorState.details?.length > 0 ? (
+        <ul className="panel validation-list error-text">
+          {errorState.details.map((detail) => (
+            <li key={detail}>{detail}</li>
+          ))}
+        </ul>
+      ) : null}
+
+      {/* Clear empty state helps users understand when search has no matches. */}
+      {hasSearched && !isSearching && !errorState.message && results.length === 0 ? (
+        <p className="panel muted-text">
+          No assets matched your filters. Try broadening your search criteria.
+        </p>
+      ) : null}
 
       {/* Result cards provide quick scan + direct navigation to asset details. */}
       <div className="card-grid">

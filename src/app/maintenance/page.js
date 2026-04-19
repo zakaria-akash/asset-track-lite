@@ -29,7 +29,7 @@ export default function MaintenancePage() {
   const [formValues, setFormValues] = useState(INITIAL_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoadingAssets, setIsLoadingAssets] = useState(true);
-  const [feedback, setFeedback] = useState({ type: "", message: "" });
+  const [feedback, setFeedback] = useState({ type: "", message: "", details: [] });
 
   // Loads assets once so users can target any asset when creating entries.
   useEffect(() => {
@@ -54,6 +54,7 @@ export default function MaintenancePage() {
           setFeedback({
             type: "error",
             message: error instanceof Error ? error.message : "Failed to load assets.",
+            details: [],
           });
         }
       } finally {
@@ -105,7 +106,7 @@ export default function MaintenancePage() {
     event.preventDefault();
 
     setIsSubmitting(true);
-    setFeedback({ type: "", message: "" });
+    setFeedback({ type: "", message: "", details: [] });
 
     try {
       const payload = {
@@ -121,7 +122,9 @@ export default function MaintenancePage() {
 
       const result = await response.json();
       if (!response.ok || result.ok !== true) {
-        throw new Error(result.error || "Failed to add maintenance entry.");
+        const message = result.error || "Failed to add maintenance entry.";
+        const details = Array.isArray(result.details) ? result.details : [];
+        throw new Error(JSON.stringify({ message, details }));
       }
 
       // Keep UX responsive by resetting form and reloading latest data after success.
@@ -129,13 +132,28 @@ export default function MaintenancePage() {
       setFeedback({
         type: "success",
         message: `Maintenance logged for asset ${result.data.asset.id}.`,
+        details: [],
       });
       await refreshAssets();
     } catch (error) {
+      // Parse structured API errors so field-level maintenance issues are actionable.
+      let message = "Failed to add maintenance entry.";
+      let details = [];
+
+      if (error instanceof Error) {
+        try {
+          const parsed = JSON.parse(error.message);
+          message = parsed.message || message;
+          details = Array.isArray(parsed.details) ? parsed.details : [];
+        } catch {
+          message = error.message;
+        }
+      }
+
       setFeedback({
         type: "error",
-        message:
-          error instanceof Error ? error.message : "Failed to add maintenance entry.",
+        message,
+        details,
       });
     } finally {
       setIsSubmitting(false);
@@ -232,10 +250,21 @@ export default function MaintenancePage() {
           <button className="accent-button" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Saving..." : "Add Maintenance Log"}
           </button>
+
+          {/* Primary feedback line summarizes the latest request outcome. */}
           {feedback.message ? (
             <p className={feedback.type === "error" ? "error-text" : "success-text"}>
               {feedback.message}
             </p>
+          ) : null}
+
+          {/* Validation details list provides field-level guidance from API responses. */}
+          {feedback.type === "error" && feedback.details?.length > 0 ? (
+            <ul className="validation-list error-text">
+              {feedback.details.map((detail) => (
+                <li key={detail}>{detail}</li>
+              ))}
+            </ul>
           ) : null}
         </div>
       </form>
@@ -243,6 +272,11 @@ export default function MaintenancePage() {
       {/* Recent list gives quick operational visibility without leaving the page. */}
       <article className="panel">
         <h2>Recent Maintenance Entries</h2>
+        {!isLoadingAssets && assets.length === 0 ? (
+          <p className="muted-text">
+            No assets found. Create an asset before logging maintenance.
+          </p>
+        ) : null}
         {recentLogs.length > 0 ? (
           <ul className="detail-list">
             {recentLogs.map((entry) => (

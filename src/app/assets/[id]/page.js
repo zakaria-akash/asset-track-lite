@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 // Shared formatting utility keeps all money values visually consistent.
@@ -16,12 +16,17 @@ function formatMoney(value) {
 export default function AssetDetailPage() {
   // useParams is the canonical client-side source for dynamic route segments.
   const params = useParams();
+  const router = useRouter();
   const assetId = params?.id;
 
   // State tracks loaded record and request lifecycle for clear rendering branches.
   const [asset, setAsset] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [statusDraft, setStatusDraft] = useState("");
+  const [isSavingStatus, setIsSavingStatus] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [actionFeedback, setActionFeedback] = useState({ type: "", message: "" });
 
   useEffect(() => {
     let isMounted = true;
@@ -41,6 +46,7 @@ export default function AssetDetailPage() {
 
         if (isMounted) {
           setAsset(result.data || null);
+          setStatusDraft(result.data?.status || "");
         }
       } catch (error) {
         if (isMounted) {
@@ -85,6 +91,132 @@ export default function AssetDetailPage() {
       {/* Main detail layout groups metadata, depreciation, and logs by concern. */}
       {asset && !isLoading && !errorMessage ? (
         <>
+          {/* Action panel adds controlled update/delete flows with user confirmation. */}
+          <article className="panel">
+            <h2>Actions</h2>
+            <p className="muted-text">
+              Update asset status or permanently delete this asset record.
+            </p>
+
+            <div className="row-actions">
+              <label>
+                Status
+                <select
+                  value={statusDraft}
+                  onChange={(event) => setStatusDraft(event.target.value)}
+                  disabled={isSavingStatus || isDeleting}
+                >
+                  <option value="in-use">in-use</option>
+                  <option value="in-maintenance">in-maintenance</option>
+                  <option value="available">available</option>
+                  <option value="retired">retired</option>
+                </select>
+              </label>
+
+              <button
+                className="accent-button"
+                type="button"
+                disabled={isSavingStatus || isDeleting || statusDraft === asset.status}
+                onClick={async () => {
+                  // Confirmation guard prevents accidental status changes.
+                  const shouldProceed = window.confirm(
+                    `Update asset status to "${statusDraft}"?`
+                  );
+                  if (!shouldProceed) {
+                    return;
+                  }
+
+                  setIsSavingStatus(true);
+                  setActionFeedback({ type: "", message: "" });
+
+                  try {
+                    const response = await fetch(`/api/assets/${assetId}`, {
+                      method: "PATCH",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ status: statusDraft }),
+                    });
+
+                    const result = await response.json();
+                    if (!response.ok || result.ok !== true) {
+                      throw new Error(result.error || "Failed to update status.");
+                    }
+
+                    setAsset(result.data);
+                    setStatusDraft(result.data.status);
+                    setActionFeedback({
+                      type: "success",
+                      message: "Asset status updated successfully.",
+                    });
+                  } catch (error) {
+                    setActionFeedback({
+                      type: "error",
+                      message:
+                        error instanceof Error ? error.message : "Failed to update status.",
+                    });
+                  } finally {
+                    setIsSavingStatus(false);
+                  }
+                }}
+              >
+                {isSavingStatus ? "Saving..." : "Save Status"}
+              </button>
+
+              <button
+                className="accent-button danger-button"
+                type="button"
+                disabled={isSavingStatus || isDeleting}
+                onClick={async () => {
+                  // Confirmation guard blocks accidental destructive operations.
+                  const shouldDelete = window.confirm(
+                    "Delete this asset permanently? This action cannot be undone."
+                  );
+                  if (!shouldDelete) {
+                    return;
+                  }
+
+                  setIsDeleting(true);
+                  setActionFeedback({ type: "", message: "" });
+
+                  try {
+                    const response = await fetch(`/api/assets/${assetId}`, {
+                      method: "DELETE",
+                    });
+
+                    const result = await response.json();
+                    if (!response.ok || result.ok !== true) {
+                      throw new Error(result.error || "Failed to delete asset.");
+                    }
+
+                    setActionFeedback({
+                      type: "success",
+                      message: "Asset deleted. Redirecting to asset list...",
+                    });
+
+                    setTimeout(() => {
+                      router.push("/assets");
+                    }, 500);
+                  } catch (error) {
+                    setActionFeedback({
+                      type: "error",
+                      message:
+                        error instanceof Error ? error.message : "Failed to delete asset.",
+                    });
+                  } finally {
+                    setIsDeleting(false);
+                  }
+                }}
+              >
+                {isDeleting ? "Deleting..." : "Delete Asset"}
+              </button>
+            </div>
+
+            {actionFeedback.message ? (
+              <p className={actionFeedback.type === "error" ? "error-text" : "success-text"}>
+                {actionFeedback.message}
+              </p>
+            ) : null}
+          </article>
+
           <div className="card-grid">
             <article className="panel compact-panel">
               <h2>Core Info</h2>

@@ -105,9 +105,14 @@ export default function AssetsPage() {
       {/* Render explicit load/error states before showing the data tables. */}
       {isLoading ? <p className="panel muted-text">Loading assets...</p> : null}
       {errorMessage ? <p className="panel error-text">{errorMessage}</p> : null}
+      {!isLoading && !errorMessage && assets.length === 0 ? (
+        <p className="panel muted-text">
+          No assets found. Create your first asset to get started.
+        </p>
+      ) : null}
 
       {/* Desktop table provides dense scanning for finance and operations teams. */}
-      {!isLoading && !errorMessage ? (
+      {!isLoading && !errorMessage && assets.length > 0 ? (
         <div className="panel table-scroll">
           <table className="asset-table" aria-label="Asset list table">
             <thead>
@@ -143,7 +148,7 @@ export default function AssetsPage() {
       ) : null}
 
       {/* Mobile cards mirror the same data in a touch-friendly stacked layout. */}
-      {!isLoading && !errorMessage ? (
+      {!isLoading && !errorMessage && assets.length > 0 ? (
         <div className="card-grid mobile-only-grid">
           {assets.map((asset) => (
             <article className="panel compact-panel" key={asset.id}>

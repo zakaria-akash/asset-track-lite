@@ -23,7 +23,11 @@ export default function AddAssetPage() {
   // Form state, processing flag, and feedback message are split for clarity.
   const [formValues, setFormValues] = useState(INITIAL_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [feedback, setFeedback] = useState({ type: "", message: "" });
+  const [feedback, setFeedback] = useState({
+    type: "",
+    message: "",
+    details: [],
+  });
 
   // Keep required-field checks close to the form state for immediate UI feedback.
   const requiredFieldsMissing = useMemo(() => {
@@ -63,12 +67,13 @@ export default function AddAssetPage() {
       setFeedback({
         type: "error",
         message: "Please fill all required fields before submitting.",
+        details: [],
       });
       return;
     }
 
     setIsSubmitting(true);
-    setFeedback({ type: "", message: "" });
+    setFeedback({ type: "", message: "", details: [] });
 
     try {
       const response = await fetch("/api/assets", {
@@ -79,12 +84,15 @@ export default function AddAssetPage() {
 
       const result = await response.json();
       if (!response.ok || result.ok !== true) {
-        throw new Error(result.error || "Asset creation failed.");
+        const message = result.error || "Asset creation failed.";
+        const details = Array.isArray(result.details) ? result.details : [];
+        throw new Error(JSON.stringify({ message, details }));
       }
 
       setFeedback({
         type: "success",
         message: `Asset created successfully: ${result.data.id}. Redirecting...`,
+        details: [],
       });
 
       // Short delay makes success feedback visible before navigation.
@@ -92,9 +100,24 @@ export default function AddAssetPage() {
         router.push(`/assets/${result.data.id}`);
       }, 600);
     } catch (error) {
+      // Parse structured API error payloads so users get actionable validation feedback.
+      let message = "Asset creation failed.";
+      let details = [];
+
+      if (error instanceof Error) {
+        try {
+          const parsed = JSON.parse(error.message);
+          message = parsed.message || message;
+          details = Array.isArray(parsed.details) ? parsed.details : [];
+        } catch {
+          message = error.message;
+        }
+      }
+
       setFeedback({
         type: "error",
-        message: error instanceof Error ? error.message : "Asset creation failed.",
+        message,
+        details,
       });
     } finally {
       setIsSubmitting(false);
@@ -229,10 +252,21 @@ export default function AddAssetPage() {
           <button className="accent-button" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Creating..." : "Create Asset"}
           </button>
+
+          {/* Primary feedback line summarizes the latest request outcome. */}
           {feedback.message ? (
             <p className={feedback.type === "error" ? "error-text" : "success-text"}>
               {feedback.message}
             </p>
+          ) : null}
+
+          {/* Validation details list provides field-level guidance from API responses. */}
+          {feedback.type === "error" && feedback.details?.length > 0 ? (
+            <ul className="validation-list error-text">
+              {feedback.details.map((detail) => (
+                <li key={detail}>{detail}</li>
+              ))}
+            </ul>
           ) : null}
         </div>
       </form>
