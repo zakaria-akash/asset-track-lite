@@ -37,6 +37,16 @@ npm run lint
 - Next.js Route Handlers for backend endpoints
 - JSON-backed seed data for the MVP baseline
 
+## Visual Theme Criteria (Mandatory Before Phase 2)
+
+- Default app theme must use a gradient combination of:
+  - Dark brown: #5C4033
+  - Dark green: #182c25
+- These two colors must be prioritized for small UI elements:
+  buttons, pills/chips, badges, compact cards, icon accents,
+  active states, and subtle borders.
+- During Phase 2, avoid introducing a competing primary color family.
+
 ## Current Architecture (Phase 1)
 
 ```text
@@ -81,8 +91,8 @@ validation.
 
 - Use JavaScript only.
 - Keep route-handler response shape consistent:
- 	- Success: { ok: true, data, message? }
- 	- Error: { ok: false, error, details? }
+  - Success: { ok: true, data, message? }
+  - Error: { ok: false, error, details? }
 - Keep core business logic in src/lib, not directly inside UI pages.
 - Write meaningful comments above non-trivial code blocks.
 - Keep naming explicit and feature-aligned.
@@ -100,5 +110,7 @@ Implementation phases are defined in [WorkFlow.md](WorkFlow.md):
 
 ## Current Status
 
-- Phase 0 and Phase 1 are completed.
-- Next target phase: Phase 2.
+- Phase 0, Phase 1, and Phase 2 are completed.
+- Next target phase: Phase 3.
+- Active theme baseline: gradient #5C4033 + #182c25 with priority on
+  small UI elements.

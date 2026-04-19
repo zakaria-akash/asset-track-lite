@@ -1,5 +1,18 @@
 @import "tailwindcss";
 
+/* Shared palette variables keep the mandatory brand colors centralized. */
+:root {
+  --color-brown: #5c4033;
+  --color-green: #182c25;
+  --color-panel: #1d1f1c;
+  --color-panel-border: #4b5a4f;
+  --color-text: #f3ede7;
+  --color-muted: #d6cdc3;
+  --color-link: #d8b996;
+  --color-error: #ff998f;
+  --color-success: #8ed6a8;
+  --button-radius: 0.5rem;
+}
 /* Global box model baseline for predictable spacing across all routes. */
 * {
   box-sizing: border-box;
@@ -12,52 +25,295 @@ body {
   min-height: 100%;
 }
 
-/* Project visual baseline from the design guide: dark, clean, high contrast. */
+/* Theme baseline uses the required dark brown + dark green gradient combination. */
 body {
-  background: #000;
-  color: #fff;
+  background: linear-gradient(150deg, var(--color-brown) 0%, var(--color-green) 100%);
+    color: var(--color-text);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.45;
 }
-/* Home route keeps the app title top-centered with generous breathing room. */
-.home {
+/* Root layout container organizes shared app chrome and page content. */
+.app-body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-    justify-content: flex-start;
-    gap: 16px;
-    align-items: center;
-  padding-top: 24px;
 }
 
-/* Home page title scale tuned for clear brand visibility on first paint. */
-.home h1 {
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 600;
-}
-
-/* Shared content shell for scaffold pages under each feature route. */
-.page-shell {
-  min-height: 100vh;
-  padding: 32px 24px;
-}
-
-/* Lightweight route chips for quick phase-zero navigation checks. */
-.phase-links {
+/* Top navigation bar prioritizes compact elements in the mandatory palette. */
+.app-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: color-mix(in srgb, var(--color-green) 78%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-brown) 65%, #000);
+  backdrop-filter: blur(8px);
 }
 
-.phase-links a {
-  color: #b8dcff;
+/* Brand treatment keeps identity clear without overpowering page content. */
+.app-brand {
+  color: var(--color-text);
   text-decoration: none;
-  border: 1px solid #1e3a5f;
-  border-radius: 999px;
-  padding: 6px 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Compact nav pills intentionally use brown-green accents per design criteria. */
+.app-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.app-nav a {
+  text-decoration: none;
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-brown) 60%, var(--color-green));
+  border: 1px solid color-mix(in srgb, var(--color-brown) 75%, #000);
+  border-radius: var(--button-radius);
+  padding: 6px 10px;
   font-size: 0.875rem;
 }
 
-.phase-links a:hover {
-  background: #0f2238;
+.app-nav a:hover {
+  background: color-mix(in srgb, var(--color-brown) 80%, var(--color-green));
+}
+
+/* Shared content rail keeps all route pages centered and readable. */
+.app-content {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Vertical stack utility for pages with multiple sections/cards. */
+.view-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Reusable elevated panel used by cards, forms, and sections. */
+.panel {
+  background: color-mix(in srgb, var(--color-panel) 88%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-panel-border) 65%, var(--color-brown));
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+}
+
+/* Header row utility aligns title content with primary action buttons. */
+.panel-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  }
+  
+  /* Compact card variant keeps grouped content dense and scannable. */
+  .compact-panel {
+    padding: 14px;
+  }
+  
+  /* Grid utility powers dashboard cards and responsive detail groups. */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  
+  /* Section heading styles standardize hierarchy across routes. */
+  .eyebrow {
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+  }
+  
+  .view-title {
+    margin: 4px 0 6px;
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+.muted-text {
+  margin: 0;
+  color: var(--color-muted);
+  }
+  
+  /* Accent button style prioritizes the two mandatory colors for small controls. */
+  .accent-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border: 1px solid color-mix(in srgb, var(--color-brown) 75%, #000);
+    border-radius: var(--button-radius);
+    padding: 8px 14px;
+    color: var(--color-text);
+    background: linear-gradient(135deg, var(--color-brown), var(--color-green));
+  font-weight: 600;
+  cursor: pointer;
+}
+
+        /* Enforce a single radius token for native button controls across the app. */
+        button,
+        input[type="button"],
+        input[type="submit"],
+        input[type="reset"] {
+          border-radius: var(--button-radius);
+        }
+
+.accent-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Chip row and chip styles are reused for statuses and compact metadata tokens. */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.accent-chip {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  border: 1px solid color-mix(in srgb, var(--color-green) 60%, var(--color-brown));
+  border-radius: 999px;
+  padding: 5px 10px;
+    color: var(--color-text);
+    background: color-mix(in srgb, var(--color-green) 70%, var(--color-brown));
+    font-size: 0.8rem;
+    text-transform: capitalize;
+  }
+  
+  /* Home secondary action buttons use the same radius contract as all main buttons. */
+  .home-bottom-button {
+    border-radius: var(--button-radius);
+  }
+  
+  .compact-chip {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
+  
+  /* Table wrappers keep large data sets horizontally accessible on smaller screens. */
+  .table-scroll {
+    overflow-x: auto;
+  }
+  
+  .asset-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
+  }
+  
+  .asset-table th,
+  .asset-table td {
+    padding: 10px;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-panel-border) 45%, #000);
+    text-align: left;
+  }
+  
+  .asset-table th {
+    color: var(--color-muted);
+    font-size: 0.84rem;
+    letter-spacing: 0.03em;
+  }
+  
+  /* Simple text links support low-emphasis navigation inside dense tables/cards. */
+  .text-link {
+    color: var(--color-link);
+    text-decoration: none;
+  }
+  
+  /* Form layout creates a clean two-column structure that stacks on mobile. */
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  
+  .form-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.9rem;
+  }
+  
+  .form-grid input,
+  .form-grid select {
+    width: 100%;
+    border: 1px solid color-mix(in srgb, var(--color-panel-border) 65%, #000);
+    border-radius: 8px;
+    padding: 9px 10px;
+    background: color-mix(in srgb, var(--color-green) 35%, #101010);
+    color: var(--color-text);
+  }
+  
+  .form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .error-text {
+    margin: 0;
+    color: var(--color-error);
+  }
+  
+  .success-text {
+    margin: 0;
+    color: var(--color-success);
+  }
+  
+  /* Detail list renders assignment and maintenance rows in a clean stacked format. */
+  .detail-list {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  
+  .detail-list li {
+    border: 1px solid color-mix(in srgb, var(--color-panel-border) 55%, #000);
+    border-radius: 10px;
+    padding: 10px;
+    display: grid;
+    gap: 4px;
+  }
+  
+  /* Mobile-only card grid is hidden by default and shown in small viewports. */
+  .mobile-only-grid {
+    display: none;
+  }
+  
+  /* Responsive adjustments preserve readability and touch ergonomics on mobile. */
+  @media (max-width: 820px) {
+    .panel-header-row {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  
+    .asset-table {
+      display: none;
+    }
+
+                .mobile-only-grid {
+                  display: grid;
+                }
 }

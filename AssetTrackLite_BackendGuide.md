@@ -14,6 +14,15 @@ JavaScript only — no TypeScript.
 - JSON or MongoDB data storage
 - Simple controllers for asset CRUD
 
+## 📐 Cross-Document UI Contract (Reference)
+
+- Before Phase 2 UI implementation, the frontend must use the mandatory
+  default gradient based on #5C4033 and #182c25.
+- The same two colors must be prioritized for small UI elements
+  (buttons, chips, badges, icon accents, and compact borders).
+- Backend APIs should remain theme-agnostic, but this contract is tracked
+  here to keep planning alignment across frontend and backend workstreams.
+
 ---
 
 ## 📁 Backend Structure

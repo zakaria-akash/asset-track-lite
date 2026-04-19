@@ -18,6 +18,16 @@ This system tracks company assets without the complexity of a full ERP, while su
 - Settings persisted (localStorage)
 - Minimal but functional search & filters
 
+## 🎨 Mandatory Visual Direction (Before Phase 2 UI Build)
+
+- Default background/theme must use a gradient that combines:
+ 	- Dark brown: #5C4033
+ 	- Dark green: #182c25
+- Small UI elements must prioritize these two colors:
+ buttons, chips/tags, badges, icon accents, compact borders,
+ and active/hover states.
+- Do not introduce another dominant primary palette during Phase 2.
+
 ---
 
 ## 🏗 Tech Stack

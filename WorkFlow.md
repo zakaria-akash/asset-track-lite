@@ -11,12 +11,18 @@ Phase 0 to Phase 5.
 - Data layer (initial): JSON-backed local dataset and helper utilities.
 - Scope (MVP): asset listing, details, create asset, maintenance logs,
   search, settings, depreciation calculation.
+- Default visual theme (mandatory): background gradient using dark brown
+  (#5C4033) and dark green (#182c25).
+- Color priority rule (mandatory): dark brown and dark green must be
+  prioritized for small UI elements (buttons, chips, tags, badges,
+  small borders, icons, active states, and highlights).
 
 ## Phase Status
 
 - Phase 0: Completed
 - Phase 1: Completed
-- Phase 2 to Phase 5: Pending
+- Phase 2: Completed
+- Phase 3 to Phase 5: Pending
 
 ## Phase 0 - Foundation and Project Setup
 
@@ -132,6 +138,11 @@ Deliver the main user interface structure and asset workflow pages.
 - depreciation summary.
 
 - Apply minimal theme direction from guides (dark, clean, readable).
+- Apply mandatory color system before other UI polish work:
+
+- page-level gradient must combine #5C4033 and #182c25.
+- small UI elements must use the same two colors as primary accents.
+- avoid introducing a competing primary color family during Phase 2.
 
 ### Phase 2 Deliverables
 
