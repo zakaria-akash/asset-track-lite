@@ -1,53 +1,58 @@
 # Asset Track Lite
 
-Asset Track Lite is a clean, small-scale asset management system built with
-Next.js App Router, JavaScript, and TailwindCSS v4.
+Asset Track Lite is a single-repo asset management MVP built with Next.js
+App Router and JavaScript. Frontend pages and backend route handlers run in
+the same project and share one deployment/runtime boundary.
 
-This project keeps frontend pages and backend API routes in one codebase on
-the same runtime and port.
+## Setup and Run
 
-## Quick Start
+### Prerequisites
 
-### 1) Install dependencies
+- Node.js 20+
+- npm 10+
+
+### Install Dependencies
 
 ```bash
 npm install
 ```
 
-### 2) Run development server
+### Start Development Server
 
 ```bash
 npm run dev
 ```
 
-Then open <http://localhost:3000>.
+App URL: <http://localhost:3000>
 
-### 3) Run lint checks
+### Quality Gates
 
 ```bash
 npm run lint
+npm run test
+npm run build
 ```
 
-## Tech Stack
+## Architecture Overview
 
-- Next.js (App Router)
+### Stack
+
+- Next.js App Router
 - React
 - JavaScript only (no TypeScript)
 - TailwindCSS v4
-- Next.js Route Handlers for backend endpoints
-- JSON-backed seed data for the MVP baseline
+- Next.js Route Handlers
+- JSON-backed file persistence (MVP)
 
-## Visual Theme Criteria (Mandatory Before Phase 2)
+### Runtime Design
 
-- Default app theme must use a gradient combination of:
-  - Dark brown: #5C4033
-  - Dark green: #182c25
-- These two colors must be prioritized for small UI elements:
-  buttons, pills/chips, badges, compact cards, icon accents,
-  active states, and subtle borders.
-- During Phase 2, avoid introducing a competing primary color family.
+- UI routes live in src/app.
+- API routes live in src/app/api.
+- Domain logic and validation live in src/lib.
+- Dataset is stored in public/data/assets.json.
+- Settings are persisted in browser localStorage.
 
-## Current Architecture (Phase 1)
+### Current Project Map
 
 ```text
 src/
@@ -77,40 +82,58 @@ public/
   assets.json
 ```
 
-## API Plan
+## API Endpoint List
 
-Phase 1 APIs are now implemented with JSON-backed persistence and
-validation.
-
-- GET and POST /api/assets
-- GET, PATCH, DELETE /api/assets/:id
+- GET /api/assets
+- POST /api/assets
+- GET /api/assets/:id
+- PATCH /api/assets/:id
+- DELETE /api/assets/:id
 - POST /api/maintenance
 - POST /api/search
 
-## Coding Rules
+Detailed examples are documented in
+[docs/API_REFERENCE.md](docs/API_REFERENCE.md).
 
-- Use JavaScript only.
-- Keep route-handler response shape consistent:
-  - Success: { ok: true, data, message? }
-  - Error: { ok: false, error, details? }
-- Keep core business logic in src/lib, not directly inside UI pages.
-- Write meaningful comments above non-trivial code blocks.
-- Keep naming explicit and feature-aligned.
+## API Response Contract
 
-## Workflow Reference
+- Success: { ok: true, data, message? }
+- Error: { ok: false, error, details? }
 
-Implementation phases are defined in [WorkFlow.md](WorkFlow.md):
+## Mandatory Theme Rules
 
-- Phase 0: Foundation and setup
-- Phase 1: Core backend domain and API implementation
-- Phase 2: Core UI pages and navigation
-- Phase 3: Search, maintenance, and settings persistence
-- Phase 4: Hardening and quality improvements
-- Phase 5: Release preparation and documentation
+- Background gradient must combine #5C4033 and #182c25.
+- Small UI elements must prioritize these two colors:
+  buttons, chips, badges, icon accents, active states, and small borders.
+- Do not introduce a competing primary color family for core controls.
+
+## Known Limitations (MVP)
+
+- Storage is file-based JSON and not intended for concurrent write load.
+- No authentication or role-based authorization is implemented.
+- No database migrations or transactional persistence layer.
+- No pagination/virtualization for very large datasets.
+- No automated end-to-end browser test suite yet.
+
+## Next-Step Roadmap
+
+- Introduce database adapter with unchanged API contracts.
+- Add authentication and action-level authorization.
+- Add pagination and indexing for large asset collections.
+- Add export/reporting and operational dashboards.
+- Add CI pipeline for lint, tests, and build verification.
+
+## Release Preparation Artifacts
+
+- Phase workflow: [WorkFlow.md](WorkFlow.md)
+- API summary and request/response examples:
+  [docs/API_REFERENCE.md](docs/API_REFERENCE.md)
+- Environment and migration notes:
+  [docs/ENVIRONMENT_NOTES.md](docs/ENVIRONMENT_NOTES.md)
+- MVP acceptance checklist:
+  [docs/RELEASE_CHECKLIST.md](docs/RELEASE_CHECKLIST.md)
 
 ## Current Status
 
-- Phase 0, Phase 1, Phase 2, Phase 3, and Phase 4 are completed.
-- Next target phase: Phase 5.
-- Active theme baseline: gradient #5C4033 + #182c25 with priority on
-  small UI elements.
+- Phase 0, Phase 1, Phase 2, Phase 3, Phase 4, and Phase 5 are completed.
+- Project state is ready for MVP tagging and handoff.
