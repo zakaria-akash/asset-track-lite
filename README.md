@@ -37,7 +37,7 @@ npm run lint
 - Next.js Route Handlers for backend endpoints
 - JSON-backed seed data for the MVP baseline
 
-## Current Architecture (Phase 0)
+## Current Architecture (Phase 1)
 
 ```text
 src/
@@ -60,6 +60,7 @@ src/
  lib/
   assets.js
   depreciation.js
+  validation.js
   settings.js
 public/
  data/
@@ -68,8 +69,8 @@ public/
 
 ## API Plan
 
-Phase 0 includes API scaffolds only. Functional implementations begin in
-Phase 1.
+Phase 1 APIs are now implemented with JSON-backed persistence and
+validation.
 
 - GET and POST /api/assets
 - GET, PATCH, DELETE /api/assets/:id
@@ -99,5 +100,5 @@ Implementation phases are defined in [WorkFlow.md](WorkFlow.md):
 
 ## Current Status
 
-- Phase 0 is scaffolded and commit-ready.
-- Next target phase: Phase 1.
+- Phase 0 and Phase 1 are completed.
+- Next target phase: Phase 2.

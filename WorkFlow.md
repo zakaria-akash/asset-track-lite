@@ -15,7 +15,8 @@ Phase 0 to Phase 5.
 ## Phase Status
 
 - Phase 0: Completed
-- Phase 1 to Phase 5: Pending
+- Phase 1: Completed
+- Phase 2 to Phase 5: Pending
 
 ## Phase 0 - Foundation and Project Setup
 
